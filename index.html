@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Final Invitation — A Birthday Mystery</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=Playfair+Display:wght@700;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<!-- ===================== OPENING ===================== -->
+<section id="screen-opening" class="screen active">
+  <div class="vignette"></div>
+  <div class="opening-inner">
+    <p class="eyebrow">A Private Birthday Gathering · The Ashford Estate</p>
+    <h1 class="title">THE FINAL<br><span>INVITATION</span></h1>
+    <div class="invitation-card">
+      <div class="wax-seal">F</div>
+      <p class="inv-to">To the Detective,</p>
+      <p class="inv-body">
+        One of our guests will not survive the night. At 9:52 PM, a life was taken beneath
+        the terrace lanterns. Eight pieces of evidence remain. Four suspects will lie.
+        Three riddles guard the truth.
+      </p>
+      <p class="inv-body">The invitation was addressed to you. It always was.</p>
+      <p class="inv-sig">— The Ashford Estate</p>
+    </div>
+    <button class="btn btn-primary" id="btn-begin">BEGIN INVESTIGATION</button>
+    <p class="hint-line">Best experienced with sound off, lights low, and a detective's patience.</p>
+  </div>
+</section>
+
+<!-- ===================== GAME ===================== -->
+<section id="screen-game" class="screen">
+  <header class="game-header">
+    <div class="brand">THE FINAL INVITATION</div>
+    <div class="progress-wrap">
+      <div class="progress-pill" title="Evidence collected">
+        <span class="dot ev"></span><span id="ev-count">0</span>/8 Evidence
+      </div>
+      <div class="progress-pill" title="Suspects interviewed">
+        <span class="dot su"></span><span id="su-count">0</span>/4 Suspects
+      </div>
+      <div class="progress-pill" title="Puzzles solved">
+        <span class="dot pz"></span><span id="pz-count">0</span>/3 Puzzles
+      </div>
+    </div>
+    <button class="btn btn-ghost" id="btn-reset">Reset</button>
+  </header>
+
+  <nav class="tabs" role="tablist">
+    <button class="tab active" data-tab="scene">The Scene</button>
+    <button class="tab" data-tab="suspects">Suspects</button>
+    <button class="tab" data-tab="evidence">Evidence</button>
+    <button class="tab" data-tab="puzzles">Puzzles</button>
+    <button class="tab" data-tab="accuse">Final Accusation</button>
+  </nav>
+
+  <main class="game-main">
+
+    <!-- SCENE -->
+    <div class="panel active" id="panel-scene">
+      <h2 class="panel-title">The Ashford Estate — Terrace, 9:52 PM</h2>
+      <p class="scene-text">
+        Rain has just stopped. Lanterns swing over the terrace, casting long shadows across
+        the stone. The victim — <strong>Lady Ashford</strong> — was found beneath the eastern railing.
+        No forced entry. No strangers. Four guests remain, and every one of them is lying about
+        something.
+      </p>
+      <div class="scene-grid">
+        <div class="scene-card">
+          <h3>Your Task</h3>
+          <p>Collect all eight pieces of evidence, interview all four suspects, then solve
+             three puzzles to unlock the final accusation.</p>
+        </div>
+        <div class="scene-card">
+          <h3>How to Play</h3>
+          <p>Click any tab to explore. Evidence and suspect interviews are saved automatically
+             in your browser.</p>
+        </div>
+        <div class="scene-card">
+          <h3>Warning</h3>
+          <p>The final accusation is validated by the game. Guessing will not work.
+             Every lie has a seam. Find it.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- SUSPECTS -->
+    <div class="panel" id="panel-suspects">
+      <h2 class="panel-title">The Four Suspects</h2>
+      <p class="panel-sub">Interview each suspect to unlock their statement. Saved automatically.</p>
+      <div class="suspect-grid" id="suspect-grid"></div>
+    </div>
+
+    <!-- EVIDENCE -->
+    <div class="panel" id="panel-evidence">
+      <h2 class="panel-title">The Evidence Board</h2>
+      <p class="panel-sub">Inspect and collect each piece. All eight are required for the puzzles.</p>
+      <div class="evidence-grid" id="evidence-grid"></div>
+    </div>
+
+    <!-- PUZZLES -->
+    <div class="panel" id="panel-puzzles">
+      <h2 class="panel-title">The Three Investigations</h2>
+      <p class="panel-sub">Each puzzle unlocks after all evidence is collected and every suspect interviewed.</p>
+
+      <div class="puzzle-card" data-puzzle="timeline">
+        <h3>Puzzle I — Reconstruct the Timeline</h3>
+        <p class="puzzle-desc">
+          Arrange the eight pieces of evidence in their true chronological order.
+          One item predates the party; the rest occurred the night of the murder.
+        </p>
+        <div class="timeline-slots" id="timeline-slots"></div>
+        <div class="timeline-pool" id="timeline-pool"></div>
+        <div class="puzzle-actions">
+          <button class="btn btn-secondary btn-hint" data-puzzle="timeline">Hint</button>
+          <button class="btn btn-primary btn-submit-puzzle" data-puzzle="timeline">Submit Timeline</button>
+        </div>
+        <div class="puzzle-feedback" id="fb-timeline"></div>
+      </div>
+
+      <div class="puzzle-card" data-puzzle="contradiction">
+        <h3>Puzzle II — Expose the Contradictions</h3>
+        <p class="puzzle-desc">
+          Pair each suspect with the single piece of evidence that most directly contradicts
+          their alibi (or confirms their motive).
+        </p>
+        <div class="contradiction-grid" id="contradiction-grid"></div>
+        <div class="puzzle-actions">
+          <button class="btn btn-secondary btn-hint" data-puzzle="contradiction">Hint</button>
+          <button class="btn btn-primary btn-submit-puzzle" data-puzzle="contradiction">Submit Pairs</button>
+        </div>
+        <div class="puzzle-feedback" id="fb-contradiction"></div>
+      </div>
+
+      <div class="puzzle-card" data-puzzle="motive">
+        <h3>Puzzle III — Motive & Opportunity</h3>
+        <p class="puzzle-desc">
+          Only one suspect possessed <em>both</em> a clear motive and the confirmed opportunity
+          at 9:52 PM. Select them.
+        </p>
+        <div class="motive-grid" id="motive-grid"></div>
+        <div class="puzzle-actions">
+          <button class="btn btn-secondary btn-hint" data-puzzle="motive">Hint</button>
+          <button class="btn btn-primary btn-submit-puzzle" data-puzzle="motive">Submit Suspect</button>
+        </div>
+        <div class="puzzle-feedback" id="fb-motive"></div>
+      </div>
+    </div>
+
+    <!-- ACCUSE -->
+    <div class="panel" id="panel-accuse">
+      <h2 class="panel-title">The Final Accusation</h2>
+      <p class="panel-sub">The game will validate your accusation. Guessing will not work.</p>
+      <div class="accuse-locked" id="accuse-locked">
+        <p>Complete all three investigations to unlock the final accusation.</p>
+      </div>
+      <form class="accuse-form" id="accuse-form">
+        <label for="accuse-suspect">Accuse a suspect:</label>
+        <select id="accuse-suspect" name="suspect">
+          <option value="">— Select —</option>
+        </select>
+        <label for="accuse-reasoning">Your reasoning (min. 20 characters):</label>
+        <textarea id="accuse-reasoning" name="reasoning" rows="5" maxlength="800"
+          placeholder="Cite the evidence that proves motive and opportunity…"></textarea>
+        <button type="submit" class="btn btn-primary" id="btn-accuse">Make Accusation</button>
+      </form>
+      <div class="accuse-feedback" id="accuse-feedback"></div>
+    </div>
+
+  </main>
+</section>
+
+<!-- ===================== ENDING ===================== -->
+<section id="screen-ending" class="screen">
+  <div class="case-closed">
+    <h2 class="case-closed-title">CASE CLOSED</h2>
+    <div class="case-closed-line"></div>
+  </div>
+  <div class="birthday-reveal">
+    <p class="eyebrow">The mystery is solved. But the celebration is only beginning.</p>
+    <h1 class="birthday-title">HAPPY BIRTHDAY,<br><span>ELLIE!</span></h1>
+    <div class="letter-card">
+      <p>Dear Ellie,</p>
+      <p>
+        Every great mystery has a detective worth following — and every great birthday
+        has someone worth celebrating. This one was written for you, because you are
+        the kind of person who makes the ordinary feel cinematic.
+      </p>
+      <p>
+        May this year bring you slow mornings, loud laughter, and the kind of stories
+        worth telling twice. You deserve every good thing.
+      </p>
+      <p class="letter-sig">— With love, always.</p>
+    </div>
+    <div class="photo-frame">
+  <img src="./ellie.jfif" height="250px" width="250px" alt="">
+    </div>
+    <p class="final-quote">
+      "The greatest mystery was never who did it. It was how someone like you
+      could make every ordinary day feel special."
+    </p>
+    <button class="btn btn-ghost" id="btn-reset-ending">Replay the Mystery</button>
+  </div>
+</section>
+
+<div id="toast" class="toast" aria-live="polite"></div>
+
+<script src="script.js"></script>
+</body>
+</html>
